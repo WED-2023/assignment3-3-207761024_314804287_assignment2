@@ -5,8 +5,14 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import { createRouter, createWebHistory } from 'vue-router';
 
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
+
+// axios configuration
+axios.defaults.baseURL = 'http://localhost'; 
+axios.defaults.withCredentials = true;
+window.axios = axios;
 
 // BootstrapVue 3
 import BootstrapVue3 from 'bootstrap-vue-3';
@@ -24,7 +30,7 @@ const router = createRouter({
 // Shared store
 const store = reactive({
   username: localStorage.getItem('username'),
-  server_domain: 'http://localhost:3000',
+  server_domain: 'http://localhost',
   login(username) {
     localStorage.setItem('username', username);
     this.username = username;
