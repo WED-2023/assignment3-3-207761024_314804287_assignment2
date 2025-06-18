@@ -1,54 +1,66 @@
 <template>
-  <div class="container">
-    <h1 class="title">Main Page</h1>
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Left column -->
+      <div class="col-md-8">
+        <h3>Explore these recipes</h3>
+        <RecipePreviewList :recipes="randomRecipes" />
+        <button class="btn btn-primary mt-3" @click="loadNewRecipes">Load New</button>
+      </div>
 
-    <RecipePreviewList title="Random Recipes" class="RandomRecipes center" />
-
-    <div v-if="!store.username" class="text-center mt-4">
-      <router-link :to="{ name: 'login' }">
-        <button class="btn btn-primary">You need to Login to view this</button>
-      </router-link>
+      <!-- Right column -->
+      <div class="col-md-4">
+        <div v-if="isLoggedIn">
+          <h4>Last Watched</h4>
+          <RecipePreviewList :recipes="lastWatchedRecipes" />
+        </div>
+        <div v-else class="login-container">
+          <LoginPage />
+        </div>
+      </div>
     </div>
-
-    <RecipePreviewList
-      title="Last Viewed Recipes"
-      :class="{
-        RandomRecipes: true,
-        blur: !store.username,
-        center: true
-      }"
-      disabled
-    />
   </div>
 </template>
 
-<script>
-import { getCurrentInstance } from 'vue';
-import RecipePreviewList from "../components/RecipePreviewList.vue";
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import RecipePreviewList from '@/components/RecipePreviewList.vue'
+import LoginPage from '@/pages/LoginPage.vue'
+import store from '@/store'
 
-export default {
-  components: {
-    RecipePreviewList
-  },
-  setup() {
-    const internalInstance = getCurrentInstance();
-    const store = internalInstance.appContext.config.globalProperties.store;
+const randomRecipes = ref([])
+const lastWatchedRecipes = ref([])
 
-    return { store };
+const isLoggedIn = computed(() => !!store.username)
+
+const loadNewRecipes = async () => {
+  try {
+    const response = await fetch(`${store.server_domain}/recipes/random`)
+    const data = await response.json()
+    randomRecipes.value = data
+  } catch (error) {
+    console.error("Error loading random recipes:", error)
   }
-};
-</script>
+}
 
-<style lang="scss" scoped>
-.RandomRecipes {
-  margin: 10px 0 10px;
+const fetchLastWatched = async () => {
+  try {
+    const response = await fetch(`${store.server_domain}/recipes/lastWatched`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    const data = await response.json()
+    lastWatchedRecipes.value = data
+  } catch (error) {
+    console.error("Error fetching last watched recipes:", error)
+  }
 }
-.blur {
-  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
-  filter: blur(2px);
-}
-::v-deep .blur .recipe-preview {
-  pointer-events: none;
-  cursor: default;
-}
-</style>
+
+onMounted(() => {
+  loadNewRecipes()
+  if (isLoggedIn.value) {
+    fetchLastWatched()
+  }
+})
+</script>

@@ -10,7 +10,7 @@
       </span>
       <span v-else>
         {{ store.username }}:
-        <button @click="logout" class="btn btn-link p-0">Logout</button> |
+        <button @click="onLogout" class="btn btn-link p-0">Logout</button> |
       </span>
     </div>
     <router-view />
@@ -18,23 +18,29 @@
 </template>
 
 <script>
-import { getCurrentInstance } from 'vue';
+// import { getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
+import store from './store'; 
 
 export default {
   name: "App",
   setup() {
-    const internalInstance = getCurrentInstance();
-    const store = internalInstance.appContext.config.globalProperties.store;
-    const toast = internalInstance.appContext.config.globalProperties.toast;
-    const router = internalInstance.appContext.config.globalProperties.$router;
+    const router = useRouter();
+    // const internalInstance = getCurrentInstance();
+    // const store = internalInstance.appContext.config.globalProperties.store;
+    // const toast = internalInstance.appContext.config.globalProperties.toast;
+    // const router = internalInstance.appContext.config.globalProperties.$router;
 
-    const logout = () => {
+    const onLogout = async () => {
       store.logout();
-      toast("Logout", "User logged out successfully", "success");
-      router.push("/").catch(() => {});
+      // toast("Logout", "User logged out successfully", "success");
+      await router.push("/").catch(() => {});
     };
 
-    return { store, logout };
+    console.log('Logout successful');
+
+
+    return { store, onLogout };
   }
 }
 </script>

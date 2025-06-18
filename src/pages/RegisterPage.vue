@@ -181,8 +181,8 @@ export default {
         return;
       }
 
-      console.log('Form is valid, sending request...');
-      
+      console.log('Form is valid, sending registration request...');
+
       try {
         const response = await axios.post(`${store.server_domain}/Register`, {
           username: form.username,
