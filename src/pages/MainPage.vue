@@ -2,14 +2,17 @@
   <div class="container mt-4">
     <div class="row">
       <!-- Left column -->
-      <div class="col-md-8">
-        <h3>Explore these recipes</h3>
-        <RecipePreviewList :recipes="randomRecipes" />
-        <button class="btn btn-primary mt-3" @click="loadNewRecipes">Load New</button>
+      <div class="col-md-7">
+        <RecipePreviewList
+          title="Explore these recipes"
+          :recipes="randomRecipes"
+          :showLoadButton="true"
+          @load="loadNewRecipes"
+        />
       </div>
 
       <!-- Right column -->
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div v-if="isLoggedIn">
           <h4>Last Watched</h4>
           <RecipePreviewList :recipes="lastWatchedRecipes" />

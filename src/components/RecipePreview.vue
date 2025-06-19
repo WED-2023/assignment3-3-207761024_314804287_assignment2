@@ -1,35 +1,77 @@
 <template>
-  <div class="card h-100">
+  <div class="card h-100 recipe-card" @click="goToRecipe">
     <img
       v-if="recipe.image"
       :src="recipe.image"
       class="card-img-top recipe-image"
-      alt="Recipe image"
+      :alt="recipe.title"
     />
     <div class="card-body text-center">
       <h5 class="card-title">{{ recipe.title }}</h5>
       <p class="card-text">{{ recipe.readyInMinutes }} minutes</p>
-      <p class="card-text">{{ recipe.aggregateLikes }} likes</p>
+
+      <!-- Dietary labels -->
+      <div class="badges mt-2">
+        <span v-if="recipe.vegan" class="badge bg-success">Vegan</span>
+        <span v-if="recipe.vegetarian" class="badge bg-info text-dark">Vegetarian</span>
+        <span v-if="recipe.glutenFree" class="badge bg-warning text-dark">Gluten Free</span>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "RecipePreview",
-  props: {
-    recipe: {
-      type: Object,
-      required: true
-    }
+<script setup>
+import { defineProps } from 'vue'
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
+  recipe: {
+    type: Object,
+    required: true
   }
+})
+
+const router = useRouter()
+
+const goToRecipe = () => {
+  router.push(`/recipe/${props.recipe.id}`)
 }
 </script>
 
 <style scoped>
+.recipe-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+  width: 100%;
+  max-width: 450px; 
+  margin: 0 auto;    
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-card:hover {
+  transform: scale(1.01);
+}
+
 .recipe-image {
   width: 100%;
-  height: 200px;
+  height: 150px; 
   object-fit: cover;
 }
+
+.card-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.badges > .badge {
+  margin: 0 4px 4px 0;
+  font-size: 0.75rem;
+  padding: 5px 8px;
+}
+
 </style>

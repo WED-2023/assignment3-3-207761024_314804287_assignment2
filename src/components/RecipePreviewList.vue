@@ -1,56 +1,51 @@
 <template>
-  <div class="container">
-    <h3>{{ title }}</h3>
-    
-    <div class="row">
-      <div class="col" v-for="r in recipes" :key="r.id">
-        <RecipePreview class="recipePreview" :recipe="r" />
-      </div>
+  <div class="recipe-list-container">
+    <h3 v-if="title" class="mb-4 text-center">{{ title }}</h3>
+
+    <div class="d-flex flex-column gap-3">
+      <RecipePreview
+        v-for="recipe in recipes"
+        :key="recipe.id"
+        :recipe="recipe"
+      />
+    </div>
+
+    <div v-if="showLoadButton" class="text-center mt-3">
+      <button class="btn btn-primary" @click="$emit('load')">
+        Load New
+      </button>
     </div>
   </div>
 </template>
 
-<script>
-import RecipePreview from "./RecipePreview.vue";
 
-export default {
-  name: "RecipePreviewList",
-  components: {
-    RecipePreview,
+<script setup>
+import { defineProps } from 'vue'
+import RecipePreview from './RecipePreview.vue'
+
+defineProps({
+  title: {
+    type: String,
+    default: ''
   },
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
+  recipes: {
+    type: Array,
+    required: true
   },
-  data() {
-    return {
-      recipes: [],
-    };
-  },
-  mounted() {
-    this.updateRecipes();
-  },
-  methods: {
-    async updateRecipes() {
-      try {
-        const response = await this.axios.get(
-          this.$root.store.server_domain + "/recipes/random"
-        );
-        const recipes = response.data.recipes;
-        this.recipes = [];
-        this.recipes.push(...recipes);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
+  showLoadButton: {
+    type: Boolean,
+    default: false
+  }
+})
+
+defineEmits(['load'])
 </script>
 
 <style scoped>
-.container {
+.recipe-list-container {
   min-height: 400px;
+  padding: 0 10px;
 }
 </style>
+
+
