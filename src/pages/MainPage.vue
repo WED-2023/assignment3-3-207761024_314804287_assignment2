@@ -15,7 +15,7 @@
       <div class="col-md-5">
         <div v-if="isLoggedIn">
           <h4>Last Watched</h4>
-          <RecipePreviewList :recipes="lastWatchedRecipes" />
+          <RecipePreviewList :recipes="lastWatchedRecipes.slice(0, 3)" />
         </div>
         <div v-else class="login-container">
           <LoginPage />
@@ -29,6 +29,7 @@
 import { ref, onMounted, computed } from 'vue'
 import RecipePreviewList from '@/components/RecipePreviewList.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+import axios from 'axios'
 import store from '@/store'
 
 const randomRecipes = ref([])
@@ -48,17 +49,16 @@ const loadNewRecipes = async () => {
 
 const fetchLastWatched = async () => {
   try {
-    const response = await fetch(`${store.server_domain}/recipes/lastWatched`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    const data = await response.json()
-    lastWatchedRecipes.value = data
+    const response = await axios.get(
+      `${store.server_domain}/users/LastViewedRecipes`,
+      { withCredentials: true }
+    );
+    lastWatchedRecipes.value = response.data;
   } catch (error) {
-    console.error("Error fetching last watched recipes:", error)
+    console.error("Error fetching last viewed recipes:", error);
   }
-}
+};
+
 
 onMounted(() => {
   loadNewRecipes()
