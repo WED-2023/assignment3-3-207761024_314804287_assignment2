@@ -8,6 +8,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
+import 'bootstrap'
 
 // axios configuration
 axios.defaults.baseURL = 'http://localhost'; 

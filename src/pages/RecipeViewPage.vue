@@ -15,10 +15,23 @@
           <span v-if="recipe.vegetarian" class="badge vegetarian">Vegetarian</span>
           <span v-if="recipe.glutenFree" class="badge gluten-free">Gluten Free</span>
         </div>
+
+        <BButton
+          :variant="isFavorite ? 'danger' : 'outline-secondary'"
+          class="mt-3"
+          @click="toggleFavorite"
+        >
+          {{ isFavorite ? "Remove From Favorites" : "Add To Favorites" }}
+        </BButton>
+
+        <b-button variant="success" class="mt-3" @click="goToProgressPage">
+          Start Making Recipe
+        </b-button>
+
+
       </div>
 
       <div class="wrapper">
-        <!-- Ingredients -->
         <div class="wrapped">
           <h5>Ingredients:</h5>
           <ul>
@@ -28,7 +41,6 @@
           </ul>
         </div>
 
-        <!-- Instructions -->
         <div class="wrapped">
           <h5>Instructions:</h5>
           <ol>
@@ -39,26 +51,73 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="text-center mt-4">
-  <a href="#" @click.prevent="router.push('/')">← Back to Main Page</a>
+
+    <div class="text-center mt-4">
+      <a href="#" @click.prevent="router.push('/')">← Back to Main Page</a>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { BButton } from 'bootstrap-vue-3';
 import axios from 'axios';
 import store from '@/store';
 
 const route = useRoute();
 const router = useRouter();
 const recipe = ref(null);
+const isFavorite = ref(false);
+const recipeId = route.params.recipeId;
 
+// Check if the recipe is marked as favorite (by externalRecipeId)
+const checkIfFavorite = async () => {
+  try {
+    const response = await axios.get(`${store.server_domain}/users/FavoritesRecipes`, {
+      withCredentials: true
+    });
+
+    const favoriteIds = response.data.map(id => String(id));
+    isFavorite.value = favoriteIds.includes(String(recipeId));
+  } catch (error) {
+    console.error("Error checking favorites list:", error.response?.data || error.message);
+  }
+};
+
+// Toggle favorite status
+const toggleFavorite = async () => {
+  try {
+    if (isFavorite.value) {
+      // Remove from favorites
+      await axios.delete(`${store.server_domain}/users/FavoritesRecipes`, {
+        data: { recipeId },
+        withCredentials: true
+      });
+      isFavorite.value = false;
+    } else {
+      // Add to favorites
+      await axios.post(`${store.server_domain}/users/FavoritesRecipes`, {
+        recipeId,
+        recipeSource: 'Spoonacular'
+      }, {
+        withCredentials: true
+      });
+      isFavorite.value = true;
+    }
+  } catch (error) {
+    console.error('Error toggling favorite:', error.response?.data || error.message);
+  }
+};
+
+
+const goToProgressPage = () => {
+  router.push(`/progress/${recipeId}`)
+}
+
+// Load recipe and mark as viewed
 onMounted(async () => {
   try {
-    const recipeId = route.params.recipeId;
-
     const response = await axios.get(`${store.server_domain}/recipes/${recipeId}`);
     const data = response.data;
 
@@ -83,10 +142,13 @@ onMounted(async () => {
       glutenFree: data.glutenFree
     };
 
-    await axios.post(`${store.server_domain}/users/LastViewedRecipes`, {
-      recipeId
-    }), {withCredentials: true};
+    await axios.post(
+      `${store.server_domain}/users/LastViewedRecipes`,
+      { recipeId },
+      { withCredentials: true }
+    );
 
+    await checkIfFavorite();
   } catch (error) {
     console.error("Error loading recipe:", error);
     router.replace("/NotFound");
@@ -95,51 +157,16 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-}
-
-.wrapped {
-  flex: 1 1 45%;
-}
-
-.recipe-image {
-  display: block;
-  margin: 0 auto;
-  width: auto;
-  max-height: 300px;
-  object-fit: cover;
-}
-
-.recipe-meta p {
-  margin: 0.2rem 0;
-}
-
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  margin: 0 4px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
+.vegan {
+  background-color: green;
   color: white;
 }
-
-.vegan {
-  background-color: #28a745;
-}
-
 .vegetarian {
-  background-color: #17a2b8;
+  background-color: orange;
+  color: white;
 }
-
 .gluten-free {
-  background-color: #ffc107;
-  color: black;
+  background-color: purple;
+  color: white;
 }
-
-
-
 </style>

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="app">
     <div id="nav">
       <router-link :to="{ name: 'main' }">Vue Recipes</router-link> |
@@ -68,4 +68,21 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-</style>
+</style> -->
+
+<template>
+  <div id="app">
+    <NavBar />
+    <router-view />
+  </div>
+</template>
+
+<script>
+import NavBar from './components/NavBar.vue'
+
+export default {
+  components: {
+    NavBar
+  }
+}
+</script>
