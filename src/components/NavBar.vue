@@ -17,11 +17,11 @@
         </template>
 
         <template v-else>
-          <!-- Username Text -->
           <b-navbar-text class="mr-3 align-middle d-flex align-items-center">
             Hello, {{ username }}
           </b-navbar-text>
-          <!-- "Personal Area" Dropdown -->
+
+          <!-- Personal Area Dropdown -->
           <div class="dropdown" @click="toggleDropdown" @blur="hideDropdown" tabindex="0">
             <span class="dropdown-toggle">Personal Area</span>
             <div v-show="showDropdown" class="dropdown-menu show custom-dropdown">
@@ -31,38 +31,46 @@
             </div>
           </div>
 
-          <!-- buttons -->
           <b-button variant="outline-primary" class="ml-2" @click="logout">Logout</b-button>
-          <b-button variant="success" class="ml-2" to="/new-recipe" tag="router-link">New Recipe</b-button>
+          <b-button variant="success" class="ml-2" @click="openNewRecipeModal">New Recipe</b-button>
         </template>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
+
+  <!-- Modal Component -->
+  <NewRecipeModal ref="modalRef" />
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
-import store from '@/store'
 import { useRouter } from 'vue-router'
+import store from '@/store'
+import NewRecipeModal from './NewRecipeModal.vue'
 
 const router = useRouter()
 const username = computed(() => store.username)
 const isLoggedIn = computed(() => !!store.username)
 
-const logout = () => {
-  store.logout()
-  router.push('/')
+// modal ref
+const modalRef = ref(null)
+function openNewRecipeModal() {
+  modalRef.value?.open()
 }
 
-// Dropdown control
+// dropdown logic
 const showDropdown = ref(false)
-const toggleDropdown = () => {
+function toggleDropdown() {
   showDropdown.value = !showDropdown.value
 }
-const hideDropdown = () => {
-  setTimeout(() => {
-    showDropdown.value = false
-  }, 150) // Delay to allow click event to register
+function hideDropdown() {
+  setTimeout(() => (showDropdown.value = false), 150)
+}
+
+// logout logic
+function logout() {
+  store.logout()
+  router.push('/')
 }
 </script>
 

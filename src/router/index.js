@@ -25,7 +25,7 @@ const routes = [
   {
     path: "/about",
     name: "about",
-    component: () => import("../pages/AboutPage.vue"), // not implemented yet
+    component: () => import("../pages/AboutPage.vue"), 
   },
   {
     path: "/favorites",
@@ -35,18 +35,18 @@ const routes = [
   {
     path: "/my-recipes",
     name: "my-recipes",
-    component: () => import("../pages/MyRecipesPage.vue"), // not implemented yet
+    component: () => import("../pages/MyRecipesPage.vue"), 
   },
   {
     path: "/family-recipes",
     name: "family-recipes",
-    component: () => import("../pages/FamilyRecipesPage.vue"), // not implemented yet
+    component: () => import("../pages/FamilyRecipesPage.vue"), 
   },
-  {
-    path: "/new-recipe",
-    name: "new-recipe",
-    component: () => import("../pages/NewRecipePage.vue"), // not implemented yet
-  },
+  // {
+  //   path: "/new-recipe",
+  //   name: "new-recipe",
+  //   component: () => import("../pages/NewRecipePage.vue"), 
+  // },
   {
     path: "/recipe/:recipeId",
     name: "recipe",

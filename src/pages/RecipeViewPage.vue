@@ -34,11 +34,15 @@
       <div class="wrapper">
         <div class="wrapped">
           <h5>Ingredients:</h5>
-          <ul>
-            <li v-for="(ing, index) in recipe.extendedIngredients" :key="index + '_' + ing.id">
-              {{ ing.original }}
-            </li>
-          </ul>
+<ul>
+  <li
+    v-for="(ingredient, index) in recipe.ingredients || recipe.extendedIngredients"
+    :key="index"
+  >
+    {{ ingredient.quantity || ingredient.amount }} {{ ingredient.unit }} {{  ingredient.originalName || ingredient.name  }}
+  </li>
+</ul>
+
         </div>
 
         <div class="wrapped">

@@ -70,7 +70,7 @@ export default {
 }
 </style> -->
 
-<template>
+<!-- <template>
   <div id="app">
     <NavBar />
     <router-view />
@@ -85,4 +85,22 @@ export default {
     NavBar
   }
 }
+</script> -->
+
+<template>
+  <div id="app">
+    <NavBar />
+    <router-view />
+  </div>
+</template>
+
+<script setup>
+import NavBar from './components/NavBar.vue'
 </script>
+
+
+
+
+
+
+
