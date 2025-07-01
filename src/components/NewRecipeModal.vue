@@ -96,7 +96,6 @@ function open() {
   show.value = true
 }
 
-// חושף את הפונקציה לקומפוננטות אחרות (כמו NavBar)
 defineExpose({ open })
 
 const recipe = reactive({

@@ -27,6 +27,7 @@
           <ol>
             <li v-for="(step, index) in parseInstructions(recipe.instructions)" :key="index">{{ step }}</li>
           </ol>
+          <button class="btn btn-primary mt-2" @click="startMakingRecipe(recipe.recipe_id)">Start Making Recipe</button>
         </div>
       </div>
     </div>
@@ -35,10 +36,12 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 import store from '@/store'
 
 const recipes = ref([])
+const router = useRouter()
 
 onMounted(async () => {
   try {
@@ -69,11 +72,20 @@ const parseInstructions = (instructionsStr) => {
 const extractImageName = (path) => {
   return path?.split('/').pop() || ''
 }
+
+const startMakingRecipe = (recipeId) => {
+  router.push(`/progress/${recipeId}`)
+}
+
 </script>
 
 <style scoped>
 img {
   max-height: 290px;
   object-fit: cover;
+}
+
+startMakingRecipe {
+  margin-top: 10px;
 }
 </style>
