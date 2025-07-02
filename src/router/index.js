@@ -42,11 +42,6 @@ const routes = [
     name: "family-recipes",
     component: () => import("../pages/FamilyRecipesPage.vue"), 
   },
-  // {
-  //   path: "/new-recipe",
-  //   name: "new-recipe",
-  //   component: () => import("../pages/NewRecipePage.vue"), 
-  // },
   {
     path: "/recipe/:recipeId",
     name: "recipe",
@@ -56,6 +51,11 @@ const routes = [
     path: '/progress/:recipeId',
     name: 'RecipeProgressPage',
     component:  () => import("../pages/RecipeProgressPage.vue"),
+  },
+  {
+    path: "/my-meal",
+    name: "my-meal",
+    component: () => import("../pages/MyMealPage.vue"),
   },
   {
     path: "/:catchAll(.*)",

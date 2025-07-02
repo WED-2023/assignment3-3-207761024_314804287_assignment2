@@ -4,6 +4,7 @@ import routes from './router/index';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import { createRouter, createWebHistory } from 'vue-router';
+import './scss/form-style.scss';
 
 
 import 'bootstrap/dist/css/bootstrap.css';

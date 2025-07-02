@@ -8,10 +8,13 @@
         <b-form-input
           id="username"
           v-model="form.username"
-          :state="v$.form.username.$dirty ? !v$.form.username.$invalid : null"
+          :state="usernameTaken ? false : (v$.form.username.$dirty ? !v$.form.username.$invalid : null)"
           @blur="v$.form.username.$touch()"
         />
-        <b-form-invalid-feedback v-if="v$.form.username.$error">
+        <b-form-invalid-feedback v-if="usernameTaken">
+          This username is already taken. Please choose another.
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-else-if="v$.form.username.$error">
           <div v-if="!v$.form.username.required">Username is required.</div>
           <div v-else-if="!v$.form.username.minLength">Minimum 3 characters.</div>
           <div v-else-if="!v$.form.username.maxLength">Maximum 8 characters.</div>
@@ -141,6 +144,7 @@ export default {
       confirmedPassword: "",
     });
 
+    const usernameTaken = ref(false);
     const passwordComputed = computed(() => form.password);
 
     const rules = {
@@ -175,6 +179,8 @@ export default {
     const onRegister = async () => {
       console.log('Register function called');
       v$.value.$touch(); 
+      usernameTaken.value = false;
+      submitError.value = null;
       
       if (v$.value.$invalid) {
         console.log('Form is invalid');
@@ -197,8 +203,13 @@ export default {
         router.push('/login'); 
         
       } catch (error) {
-        console.error('Registration error:', error);
-        submitError.value = error.response?.data?.message || 'Registration failed';
+        const msg = error.response?.data?.message || 'Registration failed';
+        submitError.value = msg;
+
+        if (msg.toLowerCase().includes('username')) {
+          usernameTaken.value = true;
+          v$.value.form.username.$touch(); 
+        }
       }
     };
 
@@ -213,9 +224,11 @@ export default {
         confirmedPassword: "",
       });
       v$.value.$reset();
+      submitError.value = null;
+      usernameTaken.value = false;
     };
 
-    return { form, v$, submitError, countries: countryList, onRegister, onReset };
+    return { form, v$, submitError, countries: countryList, onRegister, onReset, usernameTaken };
   },
 };
 </script>

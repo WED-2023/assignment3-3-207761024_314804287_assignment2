@@ -8,10 +8,13 @@
         <b-form-input
           id="username"
           v-model="form.username"
-          :state="v$.form.username.$dirty ? !v$.form.username.$invalid : null"
+          :state="usernameNotFound ? false : (v$.form.username.$dirty ? !v$.form.username.$invalid : null)"
           @blur="v$.form.username.$touch()"
         />
-        <b-form-invalid-feedback v-if="v$.form.username.$error">
+        <b-form-invalid-feedback v-if="usernameNotFound">
+          Username not found. Please try again.
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-else-if="v$.form.username.$error">
           Username is required.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -22,10 +25,13 @@
           id="password"
           type="password"
           v-model="form.password"
-          :state="v$.form.password.$dirty ? !v$.form.password.$invalid : null"
+          :state="wrongPassword ? false : (v$.form.password.$dirty ? !v$.form.password.$invalid : null)"
           @blur="v$.form.password.$touch()"
         />
-        <b-form-invalid-feedback v-if="v$.form.password.$error">
+        <b-form-invalid-feedback v-if="wrongPassword">
+          Incorrect password. Please try again.
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-else-if="v$.form.password.$error">
           <div v-if="!v$.form.password.required">Password is required.</div>
           <div v-else-if="!v$.form.password.minLength">Password too short.</div>
           <div v-else-if="!v$.form.password.maxLength">Password too long.</div>
@@ -33,6 +39,7 @@
           <div v-else-if="!v$.form.password.hasSpecial">Must include special character.</div>
         </b-form-invalid-feedback>
       </b-form-group>
+
 
       <!-- Submit button -->
       <b-button type="submit" variant="primary" class="w-100">Login</b-button>
@@ -90,10 +97,17 @@ export default {
 
     const v$ = useVuelidate(rules, { form });
     const submitError = ref(null);
+    const usernameNotFound = ref(false);
+    const wrongPassword = ref(false);
+
 
     const onLogin = async () => {
       console.log('Login function called');
       v$.value.$touch();
+      usernameNotFound.value = false;
+      wrongPassword.value = false;
+      submitError.value = null;
+
       if (v$.value.$invalid) {
         console.log('Form is invalid');
         return;
@@ -112,11 +126,19 @@ export default {
         router.push('/');
       } catch (error) {
         console.error('Login error:', error);
-        submitError.value = error.response?.data?.message || 'Login failed';
+        const msg = error.response?.data?.message?.toLowerCase() || 'login failed';
+
+        submitError.value = msg;
+
+        if (msg.includes('username')) {
+          usernameNotFound.value = true;
+        } else if (msg.includes('password')) {
+          wrongPassword.value = true;
+        }
       }
     };
 
-    return { form, v$, submitError, onLogin };
+    return { form, v$, submitError, onLogin, usernameNotFound, wrongPassword };
   }
 };
 </script>

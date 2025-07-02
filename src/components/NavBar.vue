@@ -28,6 +28,7 @@
               <router-link class="dropdown-item" to="/favorites">My Favorites</router-link>
               <router-link class="dropdown-item" to="/my-recipes">My Recipes</router-link>
               <router-link class="dropdown-item" to="/family-recipes">My Family Recipes</router-link>
+              <router-link class="dropdown-item" to="/my-meal">My Meal Plan <b-badge variant="primary">{{ mealCount }}</b-badge></router-link>
             </div>
           </div>
 
@@ -45,12 +46,15 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import store from '@/store'
+import axios from 'axios'
 import NewRecipeModal from './NewRecipeModal.vue'
 
 const router = useRouter()
 const username = computed(() => store.username)
 const isLoggedIn = computed(() => !!store.username)
+const mealCount = ref(0)
 
 // modal ref
 const modalRef = ref(null)
@@ -72,6 +76,21 @@ function logout() {
   store.logout()
   router.push('/')
 }
+
+async function fetchMealCount() {
+  try {
+    const response = await axios.get(`${store.server_domain}/users/MyMeal`, {
+      withCredentials: true,
+    })
+    mealCount.value = response.data.length
+  } catch (err) {
+    console.error('Failed to fetch meal count:', err)
+  }
+}
+
+onMounted(fetchMealCount)
+
+
 </script>
 
 <style scoped>
