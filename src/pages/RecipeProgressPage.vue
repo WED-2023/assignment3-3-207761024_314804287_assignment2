@@ -196,6 +196,7 @@ async function ensureRecipeInMeal(recipeId) {
       recipeId,
       servings: 1
     }, { withCredentials: true })
+    store.setMealCount(store.mealCount + 1)
   } catch (e) {
     if (e.response?.status === 409) {
       console.log("Recipe already in MyMeal")

@@ -99,55 +99,99 @@ const goToRecipe = () => {
 <style scoped>
 .recipe-card {
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease-in-out;
   width: 100%;
-  max-width: 450px;
+  max-width: 360px;
   margin: 0 auto;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fffdf8;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .recipe-card:hover {
-  transform: scale(1.01);
+  transform: scale(1.015);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .recipe-image {
   width: 100%;
-  height: 150px;
+  height: 150px; 
   object-fit: cover;
+  border-bottom: 2px solid #f2e6d9;
+}
+
+.card-body {
+  padding: 1rem 1.2rem;
+  background-color: #F5F3F4;
 }
 
 .card-title {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #5C4033;
+  margin-bottom: 0.3rem;
 }
 
 .card-text {
   font-size: 0.95rem;
-  margin-bottom: 0.3rem;
+  color: #5C4033;
+  margin-bottom: 0.5rem;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .badges > .badge {
-  margin: 0 4px 4px 0;
   font-size: 0.75rem;
-  padding: 5px 8px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  background-color: #f4e1c9;
+  color: #5a3e2b;
+  border: 1px solid #d8c0a3;
+}
+
+.badge.bg-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+.badge.bg-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-color: #bee5eb;
+}
+
+.badge.bg-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-color: #ffeeba;
 }
 
 .watched-indicator {
   position: absolute;
   top: 8px;
   left: 8px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #4b2e2e;
   color: #ffffff;
-  padding: 2px 6px;
-  border-radius: 5px;
+  padding: 3px 8px;
+  border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .favorite-btn {
   position: absolute;
   top: 0px;
-  right: 8px;
+  right: 10px;
   background: none;
   border: none;
   padding: 0;
@@ -156,17 +200,18 @@ const goToRecipe = () => {
 }
 
 .favorite-btn .star {
-  font-size: 2rem;
-  color: #ccc;
+  font-size: 1.8rem;
+  color: #ddd;
   transition: transform 0.2s, color 0.2s;
 }
 
 .favorite-btn .star.active {
   color: gold;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
 }
 
 .favorite-btn:hover .star {
-  transform: scale(2.5);
+  transform: scale(1.4);
   color: gold;
 }
 

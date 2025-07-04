@@ -59,10 +59,10 @@
         <div class="col"><input class="form-control" placeholder="Quantity" v-model="ing.quantity" required /></div>
         <div class="col"><input class="form-control" placeholder="Unit" v-model="ing.unit" /></div>
         <div class="col-auto">
-          <button type="button" class="btn btn-danger" @click="removeIngredient(index)">X</button>
+          <button type="button" class="btn btn-danger" @click="removeIngredient(index)">Remove</button>
         </div>
       </div>
-      <button type="button" class="btn btn-secondary mb-3" @click="addIngredient">+ Add Ingredient</button>
+      <button type="button" class="btn btn-add mb-3" @click="addIngredient">+ Add Ingredient</button>
 
       <hr />
       <!-- Instructions -->
@@ -72,7 +72,7 @@
         <textarea class="form-control" v-model="inst.step" required></textarea>
         <button type="button" class="btn btn-sm btn-danger mt-1" @click="removeInstruction(index)">Remove</button>
       </div>
-      <button type="button" class="btn btn-secondary mb-3" @click="addInstruction">+ Add Step</button>
+      <button type="button" class="btn btn-add mb-3" @click="addInstruction">+ Add Step</button>
 
       <div class="mt-3 text-end">
         <b-button variant="secondary" @click="resetForm">Reset</b-button>
@@ -158,3 +158,137 @@ async function submitRecipe() {
   }
 }
 </script>
+
+
+<style scoped>
+form {
+  font-family: 'Poppins', sans-serif;
+  color: #3e2e2e;
+  background-color: #F3F5F4;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* רקע כהה חיצוני למודאל */
+::v-deep .modal-content {
+  background-color: rgba(0, 0, 0, 0.45); /* כהה יותר */
+  backdrop-filter: blur(6px);
+  padding: 1.5rem;
+  border-radius: 20px;
+}
+
+::v-deep .modal-title {
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #4b2e2e;
+}
+
+input.form-control,
+textarea.form-control {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  background-color: #fffaf5;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input.form-control:focus,
+textarea.form-control:focus {
+  border-color: #c9945c;
+  box-shadow: 0 0 6px rgba(201, 148, 92, 0.3);
+  outline: none;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.form-check {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-check-label {
+  margin-left: 6px;
+  font-size: 0.95rem;
+}
+
+/* Reset (secondary) - אדום */
+::v-deep .btn-secondary {
+  background: linear-gradient(to right, #d46a6a, #c94c4c);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  margin: 0 0.5rem;
+}
+
+::v-deep .btn-secondary:hover {
+  background: linear-gradient(to right, #b83f3f, #a63131);
+}
+
+/* Submit (primary) - בז' */
+::v-deep .btn-primary {
+  background-color: #d7c1aa;
+  color: #4b2e2e;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::v-deep .btn-primary:hover {
+  background-color: #c2a68e;
+}
+
+/* כפתורי Add Step / Add Ingredient */
+.btn-add {
+  background-color: #d7c1aa;
+  color: #4b2e2e;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 16px;
+}
+
+.btn-add:hover {
+  background-color: #c2a68e;
+}
+
+.btn-danger {
+  background: linear-gradient(to right, #d46a6a, #c94c4c);;
+  color: #781f1f;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+}
+
+.btn-danger:hover {
+  background-color: #e06b6b;
+}
+
+h5 {
+  font-weight: 600;
+  margin-top: 1.5rem;
+  color: #4b2e2e;
+}
+
+.form-group,
+.form-row {
+  margin-bottom: 1rem;
+}
+
+hr {
+  border-top: 1px solid #e8d8c2;
+  margin: 1.5rem 0;
+}
+
+.form-row.align-items-center {
+  gap: 10px;
+}
+
+
+</style>
+

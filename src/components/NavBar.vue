@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="light" variant="light">
+  <b-navbar toggleable="lg" class="custom-navbar">
     <b-navbar-brand to="/" tag="router-link">Recipes</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse" />
@@ -11,24 +11,28 @@
 
       <b-navbar-nav class="ml-auto">
         <template v-if="!isLoggedIn">
-          <b-navbar-text class="align-middle d-flex align-items-center">Hello Guest</b-navbar-text>
+          <span class="align-middle d-flex align-items-center">Hello Guest</span>
           <b-nav-item to="/login" tag="router-link">Login</b-nav-item>
           <b-nav-item to="/register" tag="router-link">Register</b-nav-item>
         </template>
 
         <template v-else>
-          <b-navbar-text class="mr-3 align-middle d-flex align-items-center">
+          <span class="hello-user-text mr-3 align-middle d-flex align-items-center">
             Hello, {{ username }}
-          </b-navbar-text>
+          </span>
 
           <!-- Personal Area Dropdown -->
           <div class="dropdown" @click="toggleDropdown" @blur="hideDropdown" tabindex="0">
-            <span class="dropdown-toggle">Personal Area</span>
+            <span class="dropdown-toggle">
+              <i class="fas fa-user-circle mr-1"></i> Personal Area
+            </span>
             <div v-show="showDropdown" class="dropdown-menu show custom-dropdown">
               <router-link class="dropdown-item" to="/favorites">My Favorites</router-link>
               <router-link class="dropdown-item" to="/my-recipes">My Recipes</router-link>
               <router-link class="dropdown-item" to="/family-recipes">My Family Recipes</router-link>
-              <router-link class="dropdown-item" to="/my-meal">My Meal Plan <b-badge variant="primary">{{ mealCount }}</b-badge></router-link>
+              <router-link class="dropdown-item" to="/my-meal">
+                My Meal Plan <b-badge variant="primary">{{ mealCount }}</b-badge>
+              </router-link>
             </div>
           </div>
 
@@ -44,11 +48,10 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
-import store from '@/store'
 import axios from 'axios'
+import store from '@/store'
 import NewRecipeModal from './NewRecipeModal.vue'
 
 const router = useRouter()
@@ -89,11 +92,95 @@ async function fetchMealCount() {
 }
 
 onMounted(fetchMealCount)
-
-
 </script>
 
 <style scoped>
+.custom-navbar {
+  background-color: var(--color-light-grey);
+  padding: 0.8rem 1.5rem;
+  border-bottom: 2px solid var(--color-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link,
+.custom-navbar .dropdown-toggle,
+.custom-navbar .navbar-text {
+  color: var(--color-text) !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+:deep(.nav-link) {
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: inherit;
+  color: var(--color-text) !important;
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: 1.2;
+}
+
+
+:deep(.nav-link:hover) {
+  color: var(--color-primary) !important;
+  text-decoration: underline;
+}
+
+.custom-navbar .navbar-brand {
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: "Segoe UI", sans-serif; 
+  color: var(--color-text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+
+.custom-navbar .dropdown-toggle:hover {
+  color: var(--color-primary) !important;
+}
+
+.custom-navbar .navbar-text {
+  margin-left: 0.75rem;
+}
+
+.hello-user-text {
+  color: var(--color-text);
+  margin-right: 0.75rem;
+  font-weight: 500;
+}
+
+.custom-navbar {
+  font-family: "Segoe UI", sans-serif; 
+}
+
+.custom-navbar .btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  font-weight: 600;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  margin-right: 0.75rem; 
+}
+
+.custom-navbar .btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.custom-navbar .btn-success {
+  background-color: var(--color-primary);
+  border: none;
+  font-weight: 600;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.custom-navbar .btn-success:hover {
+  background-color: var(--color-primary-dark);
+}
+
 .ml-auto {
   margin-left: auto;
 }
@@ -104,30 +191,40 @@ onMounted(fetchMealCount)
   padding: 0.5rem;
 }
 
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .custom-dropdown {
   position: absolute;
   right: 0;
   top: 100%;
   display: block;
   min-width: 10rem;
-  background-color: white;
-  border: 1px solid #ccc;
+  background-color: var(--color-light-grey);
+  border: 1px solid var(--color-accent);
   z-index: 1000;
   border-radius: 0.25rem;
-}
-
-.dropdown-toggle {
-  color: #007bff;
-  text-decoration: underline;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .dropdown-menu .dropdown-item {
   padding: 0.5rem 1rem;
-  color: #212529;
+  color: var(--color-text);
   display: block;
   white-space: nowrap;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
+
 .dropdown-menu .dropdown-item:hover {
-  background-color: #f8f9fa;
+  background-color: var(--color-primary);
+  color: white;
 }
 </style>
+

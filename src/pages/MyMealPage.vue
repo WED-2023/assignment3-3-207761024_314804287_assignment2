@@ -60,6 +60,7 @@ async function fetchMyMeal() {
   try {
     const response = await axios.get(`${store.server_domain}/users/MyMeal`, { withCredentials: true })
     recipes.value = response.data
+    store.setMealCount(recipes.value.length) 
   } catch (err) {
     console.error('Failed to load meal recipes:', err)
   } finally {
@@ -74,6 +75,7 @@ async function removeFromMeal(recipeId) {
       withCredentials: true,
     })
     recipes.value = recipes.value.filter(r => r.id !== recipeId)
+    store.setMealCount(store.mealCount - 1) 
   } catch (err) {
     console.error('Failed to remove:', err)
   }
