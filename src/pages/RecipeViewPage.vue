@@ -1,63 +1,74 @@
 <template>
-  <div class="container">
-    <div v-if="recipe">
-      <div class="recipe-header mt-3 mb-4 text-center">
-        <h1>{{ recipe.title }}</h1>
-        <img :src="recipe.image" class="recipe-image" :alt="recipe.title" />
-      </div>
+  <div class="recipe-view-page">
+    <div v-if="recipe" class="recipe-container">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <img :src="recipe.image" class="hero-image" :alt="recipe.title" />
+        <div class="hero-text">
+          <h1 class="recipe-title">{{ recipe.title }}</h1>
+          <div class="tags">
+            <span v-if="recipe.vegan" class="badge vegan">Vegan</span>
+            <span v-if="recipe.vegetarian" class="badge vegetarian">Vegetarian</span>
+            <span v-if="recipe.glutenFree" class="badge gluten-free">Gluten Free</span>
+          </div>
+          <div class="meta-info">
+            <span>🕒 Ready in: {{ recipe.readyInMinutes }} min</span>
+            <span>👨‍👩‍👧‍👦 Servings: {{ recipe.servings }}</span>
+          </div>
 
-      <div class="recipe-meta mb-4 text-center">
-        <p><strong>Ready in:</strong> {{ recipe.readyInMinutes }} minutes</p>
-        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+          <div class="btn-group">
+            <b-button
+              :variant="isFavorite ? 'danger' : 'outline-secondary'"
+              class="action-btn"
+              @click="toggleFavorite"
+            >
+              {{ isFavorite ? "Remove From Favorites" : "Add To Favorites" }}
+            </b-button>
 
-        <div class="mt-2">
-          <span v-if="recipe.vegan" class="badge vegan">Vegan</span>
-          <span v-if="recipe.vegetarian" class="badge vegetarian">Vegetarian</span>
-          <span v-if="recipe.glutenFree" class="badge gluten-free">Gluten Free</span>
-        </div>
-
-        <BButton
-          :variant="isFavorite ? 'danger' : 'outline-secondary'"
-          class="mt-3"
-          @click="toggleFavorite"
-        >
-          {{ isFavorite ? "Remove From Favorites" : "Add To Favorites" }}
-        </BButton>
-
-        <b-button variant="success" class="mt-3" @click="goToProgressPage">
-          Start Making Recipe
-        </b-button>
-
-
-      </div>
-
-      <div class="wrapper">
-        <div class="wrapped">
-          <h5>Ingredients:</h5>
-<ul>
-  <li
-    v-for="(ingredient, index) in recipe.ingredients || recipe.extendedIngredients"
-    :key="index"
-  >
-    {{ ingredient.quantity || ingredient.amount }} {{ ingredient.unit }} {{  ingredient.originalName || ingredient.name  }}
-  </li>
-</ul>
-
-        </div>
-
-        <div class="wrapped">
-          <h5>Instructions:</h5>
-          <ol>
-            <li v-for="step in recipe._instructions" :key="step.number">
-              {{ step.step }}
-            </li>
-          </ol>
+            <b-button variant="success" class="action-btn" @click="goToProgressPage">
+              Start Making Recipe
+            </b-button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="text-center mt-4">
-      <a href="#" @click.prevent="router.push('/')">← Back to Main Page</a>
+      <!-- Content Section -->
+      <div class="content-section">
+        <div class="info-card">
+          <h4>Ingredients</h4>
+          <div class="ingredient-grid">
+            <div
+              class="ingredient-item"
+              v-for="ingredient in recipe.extendedIngredients"
+              :key="ingredient.id"
+            >
+              <img
+                :src="`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`"
+                :alt="ingredient.name"
+              />
+              <div class="ingredient-text">
+                <strong>
+                  {{ isNaN(Number(ingredient.amount)) ? ingredient.amount : Number(ingredient.amount).toFixed(2) }}
+                  {{ ingredient.unit }}
+                </strong>
+                  {{ ingredient.name || ingredient.originalName }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h4>Instructions</h4>
+          <div v-for="step in recipe._instructions" :key="step.number" class="step-box">
+            <div class="step-number">{{ step.number.toString().padStart(2, '0') }}</div>
+            <div class="step-text">{{ step.step }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-link text-center mt-4">
+        <a href="#" @click.prevent="router.push('/')">← Back to Main Page</a>
+      </div>
     </div>
   </div>
 </template>
@@ -161,16 +172,174 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.vegan {
-  background-color: green;
+.recipe-view-page {
+  font-family: 'Poppins', sans-serif;
+  background: #f9f5f0;
+  padding: 2rem;
+}
+
+.hero-section {
+  display: flex;
+  align-items: stretch; 
+  flex-wrap: wrap;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+.hero-image {
+  flex: 1 1 360px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.hero-text {
+  flex: 1 1 400px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 250px;
+}
+
+.recipe-title {
+  font-size: 3.5rem;
+  color: #4b2e2e;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  word-wrap: break-word;
+}
+
+.tags {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tags .badge {
+  font-size: 0.9rem;
+  padding: 0.4em 0.8em;
+  border-radius: 10px;
   color: white;
+}
+
+.vegan {
+  background-color: #2E7D32;
 }
 .vegetarian {
-  background-color: orange;
-  color: white;
+  background-color: #00BCD4;
 }
 .gluten-free {
-  background-color: purple;
-  color: white;
+  background-color: #FFC107;
+}
+
+.meta-info {
+  font-size: 1.15rem;
+  color: #161A1D;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 2.3rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.action-btn {
+  flex: 1 1 220px;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.content-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 3rem;
+  gap: 2rem;
+}
+
+.info-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  flex: 1 1 400px;
+}
+
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ingredient-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ingredient-text {
+  font-size: 0.95rem;
+  color: #3e2e2e;
+}
+
+.step-box {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.step-number {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #C08457;
+  margin-right: 0.75rem;
+}
+
+.step-text {
+  flex: 1;
+  font-size: 1rem;
+  color: #3e2e2e;
+}
+
+.back-link a {
+  color: #6c4f3d;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+.info-card h4 {
+  font-size: 1.6rem;
+  color: #4b2e2e;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 </style>

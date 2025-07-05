@@ -1,58 +1,48 @@
 <template>
-  <div class="container mt-4">
-    <!-- Search Bar -->
-    <div class="form-group mb-3">
-      <input v-model="searchQuery" type="text" class="form-control" placeholder="Search for a recipe..." />
-    </div>
+  <div class="search-page">
+    <h2 class="title">Explore Recipes</h2>
 
-    <!-- Filters -->
-    <div class="row mb-3">
-      <div class="col-md-3">
-        <select v-model="selectedCuisine" class="form-control">
+    <!-- Search Inputs -->
+    <div class="search-controls">
+      <input v-model="searchQuery" type="text" class="search-input" placeholder="🔍 Search for a recipe..." />
+
+      <div class="filters">
+        <select v-model="selectedCuisine">
           <option value="">All Cuisines</option>
-          <option v-for="c in cuisines" :key="c" :value="c">{{ c }}</option>
+          <option v-for="c in cuisines" :key="c" :value="c">🍽️ {{ c }}</option>
         </select>
-      </div>
-      <div class="col-md-3">
-        <select v-model="selectedDiet" class="form-control">
+        <select v-model="selectedDiet">
           <option value="">All Diets</option>
-          <option v-for="d in diets" :key="d" :value="d">{{ d }}</option>
+          <option v-for="d in diets" :key="d" :value="d">🥗 {{ d }}</option>
         </select>
-      </div>
-      <div class="col-md-3">
-        <select v-model="selectedIntolerance" class="form-control">
+        <select v-model="selectedIntolerance">
           <option value="">No Intolerances</option>
-          <option v-for="i in intolerances" :key="i" :value="i">{{ i }}</option>
+          <option v-for="i in intolerances" :key="i" :value="i">🚫 {{ i }}</option>
         </select>
-      </div>
-      <div class="col-md-3 d-flex">
-        <select v-model="selectedNumber" class="form-control me-2">
+        <select v-model="selectedNumber">
           <option value="5">5 results</option>
           <option value="10">10 results</option>
           <option value="15">15 results</option>
         </select>
-        <select v-model="selectedSort" class="form-control">
+        <select v-model="selectedSort">
           <option value="">No Sort</option>
-          <option value="prep-asc">Ascending preparation time</option>
-          <option value="prep-desc">Descending preparation time</option>
+          <option value="prep-asc">Prep Time Ascending</option>
+          <option value="prep-desc">Prep Time Descending</option>
           <option value="popularity">Popularity</option>
         </select>
       </div>
-    </div>
 
-    <!-- Search and clear Button -->
-    <div class="text-center mb-4 d-flex justify-content-center gap-3">
-      <button class="btn btn-primary" @click="searchRecipes">Search</button>
-      <button class="btn btn-secondary" @click="clearSearch">Clear Search</button>
+      <div class="buttons">
+        <button class="btn-search" @click="searchRecipes">Search</button>
+        <button class="btn-clear" @click="clearSearch">Clear Search</button>
+      </div>
     </div>
-
 
     <!-- Results -->
     <RecipePreviewList :recipes="recipes" v-if="recipes.length" />
 
-    <!-- No Results Message -->
-    <div v-else-if="searched" class="alert alert-warning text-center">
-      No recipes found for the given search parameters.
+    <div v-else-if="searched" class="no-results">
+      <p>No recipes found for the given search parameters.</p>
     </div>
   </div>
 </template>
@@ -194,11 +184,150 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-input,
-select.form-control {
-  white-space: nowrap;
+.search-page {
+  padding: 2rem;
+  background: url('@/assets/search3.jpg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
 }
-button {
-  width: 200px;
+
+.title {
+  text-align: center;
+  font-size: 3rem;
+  color: #3e2e2e;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  position: relative;
+}
+
+.title::after {
+  content: '';
+  width: 90px;
+  height: 4px;
+  background: #c08457;
+  display: block;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+.search-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.search-input {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 1100px;
+  background-color: #fef9f3;
+  border: 1px solid #d9bfa8;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  outline: none;
+  background-color: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.search-input,
+.filters select {
+  background-color: #fef9f3;
+  border: 1px solid #d9bfa8;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1100px;
+  /* margin-bottom: 1rem; */
+  /* margin-top: 0.5rem; */
+}
+
+select {
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  min-width: 160px;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.btn-search,
+.btn-clear {
+  padding: 0.3rem 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-search {
+  background: linear-gradient(to right, #c9945c, #dba76c);
+  color: white;
+  box-shadow: 0 4px 12px rgba(201, 148, 92, 0.4);
+}
+
+.btn-search:hover {
+  background: linear-gradient(to right, #b37644, #cc8e55);
+}
+
+.btn-clear {
+  background: #5e5e5e;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-clear:hover {
+  background: #3e3e3e;
+}
+
+.horizontal-recipe-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.recipe-horizontal-card {
+  flex: 1 1 calc(30% - 2rem);
+  max-width: 350px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-horizontal-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.no-results {
+  text-align: center;
+  margin-top: 3rem;
+  color: #6c6c6c;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 </style>
+

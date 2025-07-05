@@ -16,8 +16,8 @@
 
         <!-- Right column -->
         <div class="col-md-6 column-box">
-          <h4>Last Watched</h4>
           <div v-if="isLoggedIn">
+            <h4>Last Watched</h4>
             <RecipePreviewList :recipes="lastWatchedRecipes.slice(0, 3)" />
           </div>
           <div v-else class="login-container">
@@ -91,6 +91,12 @@ onMounted(() => {
   padding: 2.5rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
+
+::v-deep(.login-page) {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
 
 h4, h2 {
   color: #3e2e2e;

@@ -11,7 +11,7 @@
 
       <b-navbar-nav class="ml-auto">
         <template v-if="!isLoggedIn">
-          <span class="align-middle d-flex align-items-center">Hello Guest</span>
+          <span class="hello-guest">Hello Guest</span>
           <b-nav-item to="/login" tag="router-link">Login</b-nav-item>
           <b-nav-item to="/register" tag="router-link">Register</b-nav-item>
         </template>
@@ -151,6 +151,17 @@ onMounted(fetchMealCount)
   font-weight: 500;
 }
 
+.hello-guest {
+  color: var(--color-text);
+  margin-right: 0.75rem;
+  font-weight: 600;
+  font-size: 1.2rem; 
+  display: flex;
+  align-items: center;
+  height: 100%; 
+}
+
+
 .custom-navbar {
   font-family: "Segoe UI", sans-serif; 
 }
@@ -183,6 +194,8 @@ onMounted(fetchMealCount)
 
 .ml-auto {
   margin-left: auto;
+  align-items: center;
+
 }
 
 .dropdown {
