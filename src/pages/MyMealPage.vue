@@ -98,7 +98,7 @@ async function removeFromMeal(recipeId) {
       withCredentials: true,
     })
     recipes.value = recipes.value.filter(r => r.id !== recipeId)
-    store.setMealCount(store.mealCount - 1) 
+    store.setMealCount(store.mealCount - 1)
   } catch (err) {
     console.error('Failed to remove:', err)
   }

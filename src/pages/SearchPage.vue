@@ -56,7 +56,6 @@ import intolerancesData from '@/assets/intolerances.js';
 import axios from 'axios';
 import store from '@/store';
 
-// State Variables
 const searchQuery = ref('');
 const selectedCuisine = ref('');
 const selectedDiet = ref('');
@@ -66,13 +65,11 @@ const selectedSort = ref('');
 const recipes = ref([]);
 const searched = ref(false);
 
-// Dropdown Data
 const cuisines = ref(cuisinesData);
 const diets = ref(dietsData);
 const intolerances = ref(intolerancesData);
 
 
-// Save last search to localStorage
 const saveLastSearch = () => {
   const lastSearch = {
     searchQuery: searchQuery.value,
@@ -85,7 +82,6 @@ const saveLastSearch = () => {
   localStorage.setItem('lastSearch', JSON.stringify(lastSearch));
 };
 
-// Load last search if exists
 const loadLastSearch = async () => {
   const saved = localStorage.getItem('lastSearch');
   if (saved && store.username) {
@@ -96,37 +92,11 @@ const loadLastSearch = async () => {
     selectedIntolerance.value = lastSearch.selectedIntolerance || '';
     selectedNumber.value = lastSearch.selectedNumber || '5';
     selectedSort.value = lastSearch.selectedSort || '';
-    await searchRecipes(); // auto-run search
+    await searchRecipes(); 
   }
 };
 
-// Search recipes
-// const searchRecipes = async () => {
-//   try {
-    
-//     const response = await axios.get(`${store.server_domain}/recipes/search`, {
-//       params: {
-//         recipeName: searchQuery.value,
-//         cuisine: selectedCuisine.value,
-//         diet: selectedDiet.value,
-//         intolerance: selectedIntolerance.value,
-//         number: selectedNumber.value,
-//         sort: selectedSort.value,
-//       }
-//     });
-//     recipes.value = response.data;
-//     searched.value = true;
-//     saveLastSearch(); // save search params
-//   } catch (err) {
-//     if (err.response?.status === 404) {
-//       recipes.value = [];
-//     } else {
-//       console.error("Error searching recipes:", err);
-//     }
-//     searched.value = true;
-//     saveLastSearch(); // save even if not found
-//   }
-// };
+
 
 const searchRecipes = async () => {
   try {
@@ -177,7 +147,6 @@ const clearSearch = () => {
   searched.value = false;
 };
 
-// On load
 onMounted(async () => {
   await loadLastSearch();
 });
@@ -249,8 +218,6 @@ onMounted(async () => {
   gap: 1rem;
   width: 100%;
   max-width: 1100px;
-  /* margin-bottom: 1rem; */
-  /* margin-top: 0.5rem; */
 }
 
 select {

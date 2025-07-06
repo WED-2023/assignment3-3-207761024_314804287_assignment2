@@ -13,11 +13,19 @@
         <input v-model="recipe.title" class="form-control" required />
       </div>
 
-      <!-- Image -->
+      <!-- Image Upload -->
       <div class="form-group mb-3">
-        <label>Image URL</label>
-        <input v-model="recipe.image" class="form-control" />
+        <label class="custom-upload-btn">
+          Upload Image
+        <input type="file" accept="image/*" @change="onImageUpload" hidden />
+        </label>
       </div>
+
+      <!-- Preview -->
+      <div v-if="recipe.image" class="mb-3">
+        <img :src="recipe.image" alt="Preview" class="img-preview" />
+      </div>
+
 
       <!-- Time & Servings -->
       <div class="form-row mb-3">
@@ -137,6 +145,18 @@ function removeInstruction(index) {
   recipe.instructions.splice(index, 1)
 }
 
+function onImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    recipe.image = reader.result; 
+  };
+  reader.readAsDataURL(file);
+}
+
+
 async function submitRecipe() {
   if (!recipe.title || recipe.ingredients.length === 0 || recipe.instructions.length === 0) {
     alert('Please fill all required fields.')
@@ -164,15 +184,15 @@ async function submitRecipe() {
 form {
   font-family: 'Poppins', sans-serif;
   color: #3e2e2e;
-  background-color: #F3F5F4;
+  background: url('@/assets/try.jpg') no-repeat center center fixed;
+  background-color: #ffeedd;
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* רקע כהה חיצוני למודאל */
 ::v-deep .modal-content {
-  background-color: rgba(0, 0, 0, 0.45); /* כהה יותר */
+  background-color: rgba(0, 0, 0, 0.45); 
   backdrop-filter: blur(6px);
   padding: 1.5rem;
   border-radius: 20px;
@@ -215,7 +235,6 @@ label {
   font-size: 0.95rem;
 }
 
-/* Reset (secondary) - אדום */
 ::v-deep .btn-secondary {
   background: linear-gradient(to right, #d46a6a, #c94c4c);
   color: white;
@@ -229,7 +248,6 @@ label {
   background: linear-gradient(to right, #b83f3f, #a63131);
 }
 
-/* Submit (primary) - בז' */
 ::v-deep .btn-primary {
   background-color: #d7c1aa;
   color: #4b2e2e;
@@ -243,7 +261,6 @@ label {
   background-color: #c2a68e;
 }
 
-/* כפתורי Add Step / Add Ingredient */
 .btn-add {
   background-color: #d7c1aa;
   color: #4b2e2e;
@@ -288,6 +305,33 @@ hr {
 .form-row.align-items-center {
   gap: 10px;
 }
+
+.img-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+}
+
+.custom-upload-btn {
+  display: inline-block;
+  background-color: #d7c1aa;
+  color: #4b2e2e;
+  font-weight: bold;
+  padding: 8px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.custom-upload-btn:hover {
+  background-color: #c2a68e;
+}
+
+
 
 
 </style>

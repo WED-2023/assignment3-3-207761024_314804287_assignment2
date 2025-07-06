@@ -1,5 +1,18 @@
 <template>
   <div class="login-page">
+
+    <!-- Welcome Text Outside -->
+    <div class="welcome-container">
+      <h1>Welcome! 👋</h1>
+      <p>
+        We're happy to see you in our website.<br />
+        A whole world of recipes, flavors,<br />
+        and personal meal planning is waiting for you.<br />
+        Enjoy your stay!
+      </p>
+    </div>
+
+
     <div class="login-card">
       <h1 class="title">Login</h1>
 
@@ -64,6 +77,8 @@
         </div>
       </b-form>
     </div>
+
+
   </div>
 </template>
 
@@ -158,13 +173,47 @@ export default {
   align-items: center;
   font-family: 'Poppins', sans-serif;
   padding: 2rem;
+  gap: 2rem; 
+  flex-wrap: wrap;
+}
+
+.login-welcome-text {
+  color: rgb(0, 0, 0);
+  max-width: 420px;
+  padding: 0.5rem;
+  text-align: left;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.login-welcome-text h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.login-welcome-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.welcome-container {
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 450px;
+  margin: 2rem;
+  font-family: 'Poppins', sans-serif;
+  color: #1f1f1f;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 
 
 
 .login-card {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 2.5rem;

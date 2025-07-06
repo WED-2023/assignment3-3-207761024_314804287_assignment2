@@ -31,7 +31,7 @@
               <router-link class="dropdown-item" to="/my-recipes">My Recipes</router-link>
               <router-link class="dropdown-item" to="/family-recipes">My Family Recipes</router-link>
               <router-link class="dropdown-item" to="/my-meal">
-                My Meal Plan <b-badge variant="primary">{{ mealCount }}</b-badge>
+                My Meal Plan <span class="meal-badge">{{ mealCount }}</span>
               </router-link>
             </div>
           </div>
@@ -239,5 +239,16 @@ onMounted(fetchMealCount)
   background-color: var(--color-primary);
   color: white;
 }
+
+.meal-badge {
+  background-color: var(--color-text);
+  color: white;
+  font-weight: bold;
+  font-size: 0.80rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+
 </style>
 

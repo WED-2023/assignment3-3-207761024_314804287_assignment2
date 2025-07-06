@@ -43,6 +43,10 @@ const store = reactive({
     localStorage.removeItem('username');
     this.username = undefined;
   },
+  mealCount: 0,
+  setMealCount(count) {
+    this.mealCount = count;
+  }
 });
 
 // Axios interceptors

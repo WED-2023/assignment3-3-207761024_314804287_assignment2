@@ -40,14 +40,17 @@
             :key="ingredient.id"
             class="ingredient-card"
           >
-            <img
-              :src="`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`"
-              :alt="ingredient.name"
-            />
+              <img
+                v-if="ingredient.image"
+                :src="ingredient.image.startsWith('http') 
+                  ? ingredient.image 
+                  : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`"
+                :alt="ingredient.name"
+              />
             <span>
               {{ (ingredient.amount * servings).toFixed(2) }}
               {{ ingredient.unit }}
-              {{ ingredient.name }}
+              {{ ingredient.name || ingredient.originalName }}
             </span>
           </li>
         </ul>
@@ -265,7 +268,6 @@ async function ensureRecipeInMeal(recipeId) {
   }
 }
 
-/* Header Section */
 .header-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -299,7 +301,6 @@ async function ensureRecipeInMeal(recipeId) {
   margin: 0;
 }
 
-/* Ingredients + Servings */
 .section-title {
   margin-top: 2rem;
   font-size: 1.8rem;
@@ -313,7 +314,6 @@ async function ensureRecipeInMeal(recipeId) {
   margin-top: 2rem;
 }
 
-/* Servings Redesign */
 .ingredients-header {
   display: flex;
   justify-content: space-between;
@@ -359,7 +359,6 @@ async function ensureRecipeInMeal(recipeId) {
 }
 
 
-/* Ingredients Grid */
 .ingredient-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -391,7 +390,6 @@ async function ensureRecipeInMeal(recipeId) {
   border-radius: 10px;
 }
 
-/* Steps */
 .steps-list {
   margin-top: 2.5rem;
   display: flex;

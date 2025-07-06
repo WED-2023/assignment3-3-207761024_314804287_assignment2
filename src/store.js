@@ -1,4 +1,5 @@
 import { reactive } from 'vue';
+import axios from 'axios';
 
 const store = reactive({
   username: localStorage.getItem('username'),
@@ -6,10 +7,21 @@ const store = reactive({
   // server_domain: "https://shay-noam."
   mealCount: 0,
 
-  login(username) {
+  async login(username) {
     localStorage.setItem('username', username);
     this.username = username;
     console.log("login", this.username);
+
+    try {
+    const response = await axios.get(`${this.server_domain}/users/MyMeal`, {
+      withCredentials: true,
+    });
+    this.setMealCount(response.data.length);
+  } catch (err) {
+    console.error("Failed to fetch meal count on login:", err);
+  }
+
+
   },
 
   logout() {

@@ -145,6 +145,7 @@ const goToRecipe = () => {
   justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
+  margin-bottom: 0.5rem;
 }
 
 .badges > .badge {

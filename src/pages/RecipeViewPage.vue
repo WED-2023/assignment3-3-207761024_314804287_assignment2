@@ -43,7 +43,10 @@
               :key="ingredient.id"
             >
               <img
-                :src="`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`"
+                v-if="ingredient.image"
+                :src="ingredient.image.startsWith('http') 
+                  ? ingredient.image 
+                  : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`"
                 :alt="ingredient.name"
               />
               <div class="ingredient-text">
@@ -86,7 +89,6 @@ const recipe = ref(null);
 const isFavorite = ref(false);
 const recipeId = route.params.recipeId;
 
-// Check if the recipe is marked as favorite (by externalRecipeId)
 const checkIfFavorite = async () => {
   try {
     const response = await axios.get(`${store.server_domain}/users/FavoritesRecipes`, {
@@ -100,18 +102,15 @@ const checkIfFavorite = async () => {
   }
 };
 
-// Toggle favorite status
 const toggleFavorite = async () => {
   try {
     if (isFavorite.value) {
-      // Remove from favorites
       await axios.delete(`${store.server_domain}/users/FavoritesRecipes`, {
         data: { recipeId },
         withCredentials: true
       });
       isFavorite.value = false;
     } else {
-      // Add to favorites
       await axios.post(`${store.server_domain}/users/FavoritesRecipes`, {
         recipeId,
         recipeSource: 'Spoonacular'
@@ -130,7 +129,6 @@ const goToProgressPage = () => {
   router.push(`/progress/${recipeId}`)
 }
 
-// Load recipe and mark as viewed
 onMounted(async () => {
   try {
     const response = await axios.get(`${store.server_domain}/recipes/${recipeId}`);
