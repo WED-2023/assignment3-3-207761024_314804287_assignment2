@@ -63,4 +63,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/)
 
 ---
 
-👨‍🍳 Built for the Web Development course – Assignment 3.3
+## Contact
+
+- **Project Lead**: Noam Tarshish & Shay Harush    
+- **Email**: Noamtars@post.bgu.ac.il & shayhar@post.bgu.ac.il 
+- **Repository**: https://github.com/WED-2023/assignment3-2-207761024_314804287_assignment2  
+
+Feel free to open an issue or submit a pull request if you find bugs or want to suggest improvements. Enjoy cooking!
