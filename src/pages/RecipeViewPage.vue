@@ -20,12 +20,16 @@
             <b-button
               :variant="isFavorite ? 'danger' : 'outline-secondary'"
               class="action-btn"
-              @click="toggleFavorite"
+              @click="handleFavorite"
             >
               {{ isFavorite ? "Remove From Favorites" : "Add To Favorites" }}
             </b-button>
 
-            <b-button variant="success" class="action-btn" @click="goToProgressPage">
+            <b-button
+              variant="success"
+              class="action-btn"
+              @click="handleProgress"
+            >
               Start Making Recipe
             </b-button>
           </div>
@@ -102,6 +106,21 @@ const checkIfFavorite = async () => {
   }
 };
 
+const handleFavorite = () => {
+  if (!store.username) {
+    return router.push({ name: 'LoginRequired', query: { from: recipeId } });
+  }
+  toggleFavorite();
+};
+
+const handleProgress = () => {
+  if (!store.username) {
+    return router.push({ name: 'LoginRequired', query: { from: recipeId } });
+  }
+  goToProgressPage();
+};
+
+
 const toggleFavorite = async () => {
   try {
     if (isFavorite.value) {
@@ -154,18 +173,25 @@ onMounted(async () => {
       vegetarian: data.vegetarian,
       glutenFree: data.glutenFree
     };
-
-    await axios.post(
-      `${store.server_domain}/users/LastViewedRecipes`,
-      { recipeId },
-      { withCredentials: true }
-    );
-
-    await checkIfFavorite();
   } catch (error) {
     console.error("Error loading recipe:", error);
     router.replace("/NotFound");
   }
+
+  if (store.username) {
+    try {
+      await axios.post(
+        `${store.server_domain}/users/LastViewedRecipes`,
+        { recipeId },
+        { withCredentials: true }
+      );
+    } catch (postErr) {
+      console.warn("Failed to update LastViewedRecipes (probably guest):", postErr.message);
+    }
+  }
+
+    await checkIfFavorite();
+
 });
 </script>
 

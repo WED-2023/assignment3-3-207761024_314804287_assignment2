@@ -58,6 +58,11 @@ const routes = [
     component: () => import("../pages/MyMealPage.vue"),
   },
   {
+  path: '/login-required',
+  name: 'LoginRequired',
+  component: () => import('../pages/LoginRequiredPage.vue')
+  },
+  {
     path: "/:catchAll(.*)",
     name: "notFound",
     component: NotFound,
